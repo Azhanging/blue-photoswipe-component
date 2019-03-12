@@ -4,7 +4,7 @@ var PhotoSwipeUI_Default = require('./photoswipe-ui-default.min');
 var photoSwipeComponent = require('./blue-photoswipe.vue');
 
 //use photo swiper
-function photoSwipe(opts) {
+function photoSwipe(opts, bindingValue) {
 
   // parse slide data (url, title, size ...) from DOM elements
   // (children of opts.el)
@@ -22,7 +22,7 @@ function photoSwipe(opts) {
       itemElm = thumbElements[i]; // <figure> element
 
       // include only element nodes
-      if (itemElm.nodeType !== 1 || itemElm.nodeName !== opts.itemTag) {
+      if (itemElm.nodeType !== 1 || itemElm.nodeName !== opts.itemTagName) {
         continue;
       }
 
@@ -68,7 +68,7 @@ function photoSwipe(opts) {
 
     // find root element of slide
     var clickedListItem = closest(eTarget, function (el) {
-      return (el.tagName && el.tagName.toUpperCase() === opts.itemTag);
+      return (el.tagName && el.tagName.toUpperCase() === opts.itemTagName);
     });
 
     if (!clickedListItem) {
@@ -140,11 +140,10 @@ function photoSwipe(opts) {
     items = parseThumbnailElements(galleryElement);
 
     // define options (if needed)
-    options = {
-
+    //合并opts的数据，再合并bindingValue的值
+    options = utils.extend(utils.extend({
       // define gallery index (for URL)
       galleryUID: galleryElement.getAttribute('data-pswp-uid'),
-
       getThumbBoundsFn: function (index) {
         // See Options -> getThumbBoundsFn section of documentation for more info
         var thumbnail = items[index].el.getElementsByTagName('img')[0], // find thumbnail
@@ -157,11 +156,9 @@ function photoSwipe(opts) {
           w: rect.width
         };
       },
-
       //避免触发focusin or focusout
       focus: false
-
-    };
+    }, opts), bindingValue);
 
     // PhotoSwipe opened from URL
     if (fromURL) {
@@ -233,17 +230,17 @@ function photoDirective(opts, el, binding) {
       var h = this.height;
       imgElm.dataset['size'] = w + 'x' + h;
     };
-    photoSwipe(utils.extend({
+    photoSwipe({
       el,
-      itemTag: opts.itemTag || "LI"
-    }, binding.value || {}));
+      itemTagName: "LI"
+    }, (binding.value || {}));
   });
 }
 
 //photo swiper in vue use install
 photoSwipe.install = function (Vue, opts) {
   opts = opts ? opts : {};
-  Vue.directive('blue-photo-swiper', {
+  Vue.directive('blue-photoswipe', {
     inserted: function (el, binding) {
       setTimeout(function () {
         photoDirective(opts, el, binding);
