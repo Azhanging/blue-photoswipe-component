@@ -230,10 +230,10 @@ function photoDirective(opts, el, binding) {
       var h = this.height;
       imgElm.dataset['size'] = w + 'x' + h;
     };
-    photoSwipe({
-      el,
+    photoSwipe(utils.extend({
+      el: el,
       itemTagName: "LI"
-    }, (binding.value || {}));
+    }, binding.value), binding.value);
   });
 }
 
@@ -255,7 +255,7 @@ photoSwipe.install = function (Vue, opts) {
 };
 
 module.exports = {
-  photoSwipe,
+  photoSwipe: photoSwipe,
   photoSwipeComponent: photoSwipeComponent.default
 };
 
