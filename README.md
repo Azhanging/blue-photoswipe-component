@@ -2,7 +2,7 @@
 
 Photoswipe in vue
 
-##Requirements
+## Requirements
 
 [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe)
 
