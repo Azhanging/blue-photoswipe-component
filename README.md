@@ -21,8 +21,8 @@ Vue.component('blue-photoswipe-component',photoSwipeComponent);
 v-blue-photoswipe
 
 ```html
-<div>
-  <div v-blue-photoswipe="{photoswipeOptions,itemTagName:'DIV'}">
+<div v-blue-photoswipe="{photoswipeOptions,itemTagName:'DIV'}">
+  <div>
     <img src="" alt="">  
   </div>
 </div>
